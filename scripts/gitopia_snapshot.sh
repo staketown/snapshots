@@ -1,10 +1,10 @@
 #!/bin/bash
 
-CHAIN_ID="agoric-3"
-SNAP_PATH="/root/snapshots/agoric"
-LOG_PATH="/root/snapshots/agoric/agoric_log.txt"
-DATA_PATH="/root/.agoric/data/"
-SERVICE_NAME="agoricd.service"
+CHAIN_ID="gitopia-janus-testnet-2"
+SNAP_PATH="/root/snapshots/gitopia"
+LOG_PATH="$SNAP_PATH/gitopia_log.txt"
+DATA_PATH="/root/.gitopia/data/"
+SERVICE_NAME="gitopiad"
 RPC_ADDRESS="http://localhost:22657"
 SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar")
 OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*tar")
