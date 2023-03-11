@@ -12,7 +12,7 @@ bash <(curl -s https://raw.githubusercontent.com/R1M-NODES/utils/master/docker-i
 
 printGreen "Start Nginx"
 PORT=80
-docker run --name snapshots --restart always -v $(pwd)/default.conf:/etc/nginx/conf.d/default.conf \
--v $(pwd)/snapshots/:/root/ -p $PORT:80 -d nginx
+docker run --name snapshots --restart always -v $HOME/cosmos-snapshots/default.conf:/etc/nginx/conf.d/default.conf \
+-v $HOME/snapshots/:/root/ -p $PORT:80 -d nginx
 
 printGreen "Nginx has beet started on port :$PORT"
