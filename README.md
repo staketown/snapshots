@@ -6,7 +6,7 @@ sudo apt install curl git docker.io -y
 ```
 
 Clone github repo  
-`git clone https://github.com/c29r3/cosmos-snapshots.git && cd cosmos-snapshots`  
+`git clone https://github.com/R1M-NODES/snapshots.git && cd cosmos-snapshots`  
 
 Create folder for snapshots  
 `mkdir $HOME/snapshots/`
@@ -22,16 +22,17 @@ docker run --name snapshots \
 -d nginx
 ```
 
-Fill in the variables in the file `akash_snapshot.sh`  
+Fill in the variables in the file `agoric_snapshot.sh`  
 ```
-CHAIN_ID="akashnet-2"
-SNAP_PATH="$HOME/snapshots/akash"
-LOG_PATH="$HOME/snapshots/akash_log.txt"
-DATA_PATH="$HOME/.akash/data/"
-SERVICE_NAME="akash.service"
+CHAIN_ID="agoric-3"
+SNAP_PATH="/root/snapshots/agoric"
+LOG_PATH="/root/snapshots/agoric/agoric_log.txt"
+DATA_PATH="/root/.agoric/data/"
+SERVICE_NAME="agoricd.service"
+RPC_ADDRESS="http://localhost:22657"
 ```
 Create new snapshot  
-`./akash_snapshot.sh`  
+`./agoric_snapshot.sh`  
 
 Check snapshot  
 ```bash
@@ -42,5 +43,5 @@ curl -s http://$(wget -qO- eth0.me)
 You can add script to the cron  
 ```cron
 # start every day at 00:00
-0 0 * * * /bin/bash -c '/root/akash_snapshot.sh'
+0 0 * * * /bin/bash -c '/root/agoric_snapshot.sh.sh'
 ```
