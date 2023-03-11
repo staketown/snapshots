@@ -1,9 +1,9 @@
 #!/bin/bash
 
 CHAIN_ID="gitopia-janus-testnet-2"
-SNAP_PATH="/root/snapshots/gitopia"
+SNAP_PATH="$HOME/snapshots/gitopia"
 LOG_PATH="$SNAP_PATH/gitopia_log.txt"
-DATA_PATH="/root/.gitopia/data/"
+DATA_PATH="$HOME/.gitopia/data/"
 SERVICE_NAME="gitopiad"
 RPC_ADDRESS="http://localhost:22657"
 SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar")
@@ -21,7 +21,7 @@ log_this() {
     local logging="$@"
     printf "|$(now_date)| $logging\n" | tee -a ${LOG_PATH}
 }
-
+mkdir $SNAP_PATH && chmod 777 -R $SNAP_NAME
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
 
