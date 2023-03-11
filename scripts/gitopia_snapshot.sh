@@ -21,7 +21,7 @@ log_this() {
     local logging="$@"
     printf "|$(now_date)| $logging\n" | tee -a ${LOG_PATH}
 }
-mkdir $SNAP_PATH && chmod 777 -R $SNAP_NAME
+mkdir $SNAP_PATH && chmod 777 -R $SNAP_PATH
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
 
