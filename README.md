@@ -43,5 +43,5 @@ curl -s http://$(wget -qO- eth0.me)
 You can add script to the cron  
 ```cron
 # start every day at 00:00
-0 0 * * * /bin/bash -c '/root/agoric_snapshot.sh.sh'
+0 0 * * * /bin/bash -c '/root/agoric_snapshot.sh'
 ```
