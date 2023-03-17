@@ -1,14 +1,14 @@
 #!/bin/bash
 
-CHAIN_ID="gitopia-janus-testnet-2"
 SNAP_PATH="$HOME/snapshots/gitopia"
 LOG_PATH="$SNAP_PATH/gitopia_log.txt"
 DATA_PATH="$HOME/.gitopia/data/"
 CONFIG_PATH="$HOME/.gitopia/config/"
 SERVICE_NAME="gitopiad"
-RPC_ADDRESS="http://localhost:22657"
-SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%dT%H:%M:%S').tar")
-OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*tar")
+RPC_ADDRESS="http://localhost:26657"
+CHAIN_ID=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.node_info.network)
+SNAP_NAME=$(echo "${CHAIN_ID}_latest.tar")
+OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*tar.lz4")
 
 
 now_date() {
@@ -22,7 +22,7 @@ log_this() {
     printf "|$(now_date)| $logging\n" | tee -a ${LOG_PATH}
 }
 
-mkdir -p $SNAP_PATH && sudo chmod 777 -R $SNAP_PATH
+sudo mkdir -p $SNAP_PATH && sudo chmod 777 -R $SNAP_PATH
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
 
@@ -31,7 +31,7 @@ sudo systemctl stop ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
 
 ###################
 log_this "Creating new snapshot"
-time tar cf ${HOME}/${SNAP_NAME} -C ${DATA_PATH} . &>>${LOG_PATH}
+tar cf - ${DATA_PATH} | lz4 - ${SNAP_NAME}.lz4
 cp $CONFIG_PATH/addrbook.json $SNAP_PATH/addrbook.json.new
 
 ###################
@@ -45,20 +45,20 @@ rm -fv ${OLD_SNAP} &>>${LOG_PATH}
 rm -fv addrbook.json &>>${LOG_PATH}
 
 log_this "Moving new snapshot to ${SNAP_PATH}"
-mv ${HOME}/${CHAIN_ID}*tar ${SNAP_PATH} &>>${LOG_PATH}
+mv $HOME/${CHAIN_ID}*tar.lz4 ${SNAP_PATH} &>>${LOG_PATH}
 mv addrbook.json.new addrbook.json &>>${LOG_PATH}
-
-#######################
-log_this "Creating file info.json"
 
 FILE_SIZE=$(du -hs ${SNAP_PATH} | awk '{print $1}')
 log_this "File has size: ${FILE_SIZE}"
 
+#######################
+log_this "Creating file info.json"
 sudo tee $SNAP_PATH/info.json > /dev/null << EOF
 {
   "blockHeight": "$LAST_BLOCK_HEIGHT",
   "fileName": "$SNAP_NAME",
   "fileSize": "$FILE_SIZE"
+  "createdAt": "$(date '+%Y-%m-%dT%H:%M:%S')"
 }
 EOF
 
