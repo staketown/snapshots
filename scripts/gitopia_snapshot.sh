@@ -7,7 +7,7 @@ DATA_PATH="$HOME/.gitopia/data/"
 CONFIG_PATH="$HOME/.gitopia/config/"
 SERVICE_NAME="gitopiad"
 RPC_ADDRESS="http://localhost:22657"
-SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%d').tar")
+SNAP_NAME=$(echo "${CHAIN_ID}_$(date '+%Y-%m-%dT%H:%M:%S').tar")
 OLD_SNAP=$(ls ${SNAP_PATH} | egrep -o "${CHAIN_ID}.*tar")
 
 
