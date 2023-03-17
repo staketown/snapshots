@@ -22,12 +22,12 @@ log_this() {
     printf "|$(now_date)| $logging\n" | tee -a ${LOG_PATH}
 }
 
-mkdir $SNAP_PATH && chmod 777 -R $SNAP_PATH
+mkdir -p $SNAP_PATH && chmod 777 -R $SNAP_PATH
 LAST_BLOCK_HEIGHT=$(curl -s ${RPC_ADDRESS}/status | jq -r .result.sync_info.latest_block_height)
 log_this "LAST_BLOCK_HEIGHT ${LAST_BLOCK_HEIGHT}"
 
 log_this "Stopping ${SERVICE_NAME}"
-systemctl stop ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
+sudo systemctl stop ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
 
 ###################
 log_this "Creating new snapshot"
@@ -36,23 +36,23 @@ cp $CONFIG_PATH/addrbook.json $SNAP_PATH/addrbook.json.new
 
 ###################
 log_this "Starting ${SERVICE_NAME}"
-systemctl start ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
+sudo systemctl start ${SERVICE_NAME}; echo $? >> ${LOG_PATH}
 
 ##################
 log_this "Removing old snapshot(s):"
 cd ${SNAP_PATH}
 rm -fv ${OLD_SNAP} &>>${LOG_PATH}
-rm addrbook.json
+rm -fv addrbook.json &>>${LOG_PATH}
 
 log_this "Moving new snapshot to ${SNAP_PATH}"
 mv ${HOME}/${CHAIN_ID}*tar ${SNAP_PATH} &>>${LOG_PATH}
-mv addrbook.json.new addrbook.json
+mv addrbook.json.new addrbook.json &>>${LOG_PATH}
 
 #######################
 log_this "Creating file info.json"
 
 FILE_SIZE=$(du -hs ${SNAP_PATH} | awk '{print $1}')
-echo $FILE_SIZE | tee -a ${LOG_PATH}
+log_this "File has size: ${FILE_SIZE}"
 
 sudo tee $SNAP_PATH/info.json > /dev/null << EOF
 {
