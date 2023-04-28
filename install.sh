@@ -1,14 +1,14 @@
 #!/bin/bash
 
-source <(curl -s https://raw.githubusercontent.com/R1M-NODES/utils/master/common.sh)
+source <(curl -s https://raw.githubusercontent.com/staketown/utils/master/common.sh)
 
 printLogo
 
-git clone https://github.com/R1M-NODES/cosmos-snapshots.git && cd $HOME/cosmos-snapshots || exit 0
+git clone https://github.com/staketown/cosmos-snapshots.git && cd $HOME/cosmos-snapshots || exit 0
 mkdir $HOME/snapshots/
 
 printGreen "Install docker and docker compose"
-bash <(curl -s https://raw.githubusercontent.com/R1M-NODES/utils/master/docker-install.sh) && sleep 1
+bash <(curl -s https://raw.githubusercontent.com/staketown/utils/master/docker-install.sh) && sleep 1
 
 printGreen "Start Nginx"
 

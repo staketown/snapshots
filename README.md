@@ -6,7 +6,7 @@ sudo apt install curl git docker.io -y
 ```
 
 Clone github repo  
-`git clone https://github.com/R1M-NODES/snapshots.git && cd cosmos-snapshots`  
+`git clone https://github.com/staketown/snapshots.git && cd cosmos-snapshots`  
 
 Create folder for snapshots  
 `mkdir $HOME/snapshots/`
